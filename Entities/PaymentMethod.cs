@@ -11,7 +11,7 @@ namespace eTech.Entities
     public string CardNumber { get; set; }
     public DateTime ExpirationDate { get; set; }
     public string CVV { get; set; }
-    public int ApplicationUserId { get; set; }
+    public string ApplicationUserId { get; set; }
     public ApplicationUser ApplicationUser { get; set; }
   }
 }
