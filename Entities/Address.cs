@@ -12,7 +12,7 @@ namespace eTech.Entities
     public string Province { get; set; }
     public string ZipCode { get; set; }
 
-    public ApplicationUser User { get; set; }
     public string ApplicationUserId { get; set; }
+    public ApplicationUser User { get; set; }
   }
 }
