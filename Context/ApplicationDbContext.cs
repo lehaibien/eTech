@@ -4,29 +4,29 @@ using Microsoft.Extensions.Configuration;
 
 namespace eTech.Context
 {
-    public class ApplicationDbContext : DbContext
+  public class ApplicationDbContext : DbContext
+  {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<ApplicationUser> Users { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<CategoryImage> CategoryImages { get; set; }
+    public DbSet<Manufacturer> Manufacturers { get; set; }
+    public DbSet<ManufacturerImage> ManufacturerImages { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<PaymentMethod> PaymentMethods { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<UserImage> UserImages { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+      modelBuilder.Entity<OrderItem>()
+      .HasKey(oi => new { oi.OrderId, oi.ProductId });
 
-        public DbSet<Address> addresses { get; set; }
-        public DbSet<ApplicationUser> users { get; set; }
-        public DbSet<Category> categories { get; set; }
-        public DbSet<CategoryImage> categoryImages { get; set; }
-        public DbSet<Manufacturer> manufacturers { get; set; }
-        public DbSet<ManufacturerImage> manufacturerImages { get; set; }
-        public DbSet<Order> orders { get; set; }
-        public DbSet<OrderItem> ordersItem { get; set; }
-        public DbSet<PaymentMethod> paymentMethods { get; set; }
-        public DbSet<Product> products { get; set; }
-        public DbSet<ProductImage> productImages { get; set; }
-        public DbSet<Rating> ratings { get; set; }
-        public DbSet<UserImage> userImages { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<OrderItem>()
-            .HasKey(oi => new { oi.OrderId, oi.ProductId });
-
-        }
     }
+  }
 }
