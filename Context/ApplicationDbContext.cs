@@ -12,7 +12,6 @@ namespace eTech.Context
         public DbSet<ApplicationUser> users { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<CategoryImage> categoryImages { get; set; }
-        public DbSet<FileUpload> fileUploads { get; set; }
         public DbSet<Manufacturer> manufacturers { get; set; }
         public DbSet<ManufacturerImage> manufacturerImages { get; set; }
         public DbSet<Order> orders { get; set; }
