@@ -18,6 +18,6 @@ namespace eTech.Entities
     public DateTime CreatedAt { get; set; }
     public DateTime ModifiedAt { get; set; }
     public ICollection<Product> Products { get; set; }
-    public CategoryImage Image { get; set; }
+    public Image Image { get; set; }
   }
 }

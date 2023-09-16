@@ -18,6 +18,7 @@ namespace eTech.Entities
     public Category Category { get; set; }
     public int ManufacturerId { get; set; }
     public Manufacturer Manufacturer { get; set; }
+    public virtual ICollection<Image> Images { get; set; }
     [DataType(DataType.DateTime)]
     public DateTime CreatedAt { get; set; }
     [DataType(DataType.DateTime)]

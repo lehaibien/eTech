@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace eTech.Entities
 {
-  public class UserImage : FileUpload
+  public class UserImage : Image
   {
     public string UserId { get; set; }
     public ApplicationUser User { get; set; }
