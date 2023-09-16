@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eTech.Entities
 {
-  public class FileUpload
+  public class Image
   {
     [Key]
     public long Id { get; set; }
