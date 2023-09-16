@@ -27,7 +27,7 @@ namespace eTech.Controllers
     // Experimental
     public Task<Manufacturer> Add([FromForm] ManufacturerRequestAdd manufacturerRequest)
     {
-      Image image = Upload(manufacturerRequest.File).Result;
+      ManufacturerImage image = Upload(manufacturerRequest.File).Result;
       Manufacturer manufacturer = new Manufacturer()
       {
         Name = manufacturerRequest.Name,
@@ -41,14 +41,19 @@ namespace eTech.Controllers
     }
 
     [HttpPost("/upload")]
-    public Task<Image> Upload(IFormFile file)
+    public Task<ManufacturerImage> Upload(IFormFile file)
     {
-      Image image = new();
+      ManufacturerImage image = new();
       if (file.Length <= 0)
       {
         return Task.FromResult(image);
       }
-      var rootFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+      var rootFolder = Path.Combine(_webHostEnvironment.ContentRootPath, "Images");
+      // Add Folder Images If this not Exists
+      if (!Directory.Exists(rootFolder))
+      {
+        Directory.CreateDirectory(rootFolder);
+      }
       var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
       var filePath = Path.Combine(rootFolder, fileName);
       using (var stream = System.IO.File.Create(filePath))
