@@ -1,25 +1,20 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using eTech.Enums;
 
 namespace eTech.Entities
 {
   public class Order
   {
-    public Order()
-    {
-      CreatedAt = DateTime.UtcNow;
-      ModifiedAt = DateTime.UtcNow;
-    }
     [Key]
     public int Id { get; set; }
     [Required]
-    public string ApplicationUserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; }
+    public string UserId { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public ApplicationUser User { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; }
     public OrderStatus OrderStatus { get; set; }
-    [DataType(DataType.DateTime)]
     public DateTime CreatedAt { get; set; }
-    [DataType(DataType.DateTime)]
     public DateTime ModifiedAt { get; set; }
   }
 }
