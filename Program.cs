@@ -20,7 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("eTech"))
 );
 // Dependency Injection
-builder.Services.AddScoped<IManufacturerService, ManufacturerService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 // app
 
