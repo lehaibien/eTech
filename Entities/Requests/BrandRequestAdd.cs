@@ -1,7 +1,5 @@
-namespace eTech.Entities.Requests
-{
-  public class ManufacturerRequestAdd
-  {
+namespace eTech.Entities.Requests {
+  public class BrandRequestAdd {
     public string Name { get; set; }
     public string Country { get; set; }
     public List<Product>? Products { get; set; }
