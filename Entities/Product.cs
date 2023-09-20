@@ -18,7 +18,7 @@ namespace eTech.Entities
     [ForeignKey(nameof(BrandId))]
     public Brand Brand { get; set; }
     public virtual ICollection<Image> Images { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
   }
 }

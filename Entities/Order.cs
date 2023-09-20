@@ -12,9 +12,10 @@ namespace eTech.Entities
     public string UserId { get; set; }
     [ForeignKey(nameof(UserId))]
     public ApplicationUser User { get; set; }
+    public Payment Payment { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; }
     public OrderStatus OrderStatus { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
   }
 }

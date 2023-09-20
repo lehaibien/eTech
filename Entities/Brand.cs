@@ -10,7 +10,7 @@ namespace eTech.Entities
     public string Country { get; set; }
     public List<Product> Products { get; set; } = new List<Product>();
     public Image Image { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
   }
 }

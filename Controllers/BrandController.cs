@@ -1,6 +1,8 @@
 using eTech.Entities;
 using eTech.Entities.Requests;
 using eTech.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eTech.Controllers
@@ -10,24 +12,31 @@ namespace eTech.Controllers
   public class BrandController : ControllerBase
   {
     private readonly IBrandService _brandService;
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    public BrandController(IBrandService brandService, IWebHostEnvironment webHostEnvironment)
-    {
+    private readonly IImageService _imageService;
+    public BrandController(IBrandService brandService, IImageService imageService) {
       _brandService = brandService;
-      _webHostEnvironment = webHostEnvironment;
+      _imageService = imageService;
     }
 
     [HttpGet]
-    public Task<List<Brand>> GetAll()
+    [Authorize]
+    public async Task<IActionResult> GetAll()
     {
-      return _brandService.GetAll();
+      return Ok(await _brandService.GetAll());
+    }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetById(int id) {
+      return Ok(await _brandService.GetById(id));
     }
 
     [HttpPost]
+    [Authorize]
     // Experimental
     public Task<Brand> Add([FromForm] BrandRequestAdd brandRequest)
     {
-      Image image = Upload(brandRequest.File).Result;
+      Image image = _imageService.Upload(brandRequest.File).Result;
       Brand brand = new Brand()
       {
         Name = brandRequest.Name,
@@ -35,32 +44,21 @@ namespace eTech.Controllers
         Products = brandRequest.Products,
         Image = image
       };
-      /*image.BrandId = brand.Id;
-      image.Brand = brand;*/
       return _brandService.Add(brand);
     }
 
-    [HttpPost("/upload")]
-    public Task<Image> Upload(IFormFile file)
+    [HttpPut]
+    [Authorize]
+    public Task<Brand> Update(Brand brand)
     {
-      Image image = new();
-      if (file.Length <= 0)
-      {
-        return Task.FromResult(image);
-      }
-      var rootFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
-      var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-      var filePath = Path.Combine(rootFolder, fileName);
-      using (var stream = System.IO.File.Create(filePath))
-      {
-        file.CopyTo(stream);
-        stream.Flush();
-      }
-      image.FileName = fileName;
-      image.FilePath = filePath;
-      image.FileSize = file.Length;
-      image.OriginalFileName = file.FileName;
-      return Task.FromResult(image);
+      return _brandService.Update(brand);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public Task Delete(int id)
+    {
+      return _brandService.Delete(id);
     }
   }
 }

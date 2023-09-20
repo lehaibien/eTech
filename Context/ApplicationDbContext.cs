@@ -1,9 +1,10 @@
 ﻿using eTech.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Context
 {
-  public class ApplicationDbContext : DbContext
+  public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
   {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -19,6 +20,7 @@ namespace eTech.Context
     public DbSet<Image> Images { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      base.OnModelCreating(modelBuilder);
       modelBuilder.Entity<OrderItem>()
         .HasKey(oi => new { oi.OrderId, oi.ProductId });
       modelBuilder.Entity<Category>()

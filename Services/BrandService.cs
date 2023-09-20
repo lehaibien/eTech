@@ -1,6 +1,8 @@
 using eTech.Context;
 using eTech.Entities;
 using eTech.Services.Interfaces;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Services;
@@ -8,13 +10,14 @@ namespace eTech.Services;
 public class BrandService : IBrandService
 {
   private readonly ApplicationDbContext _context;
-  public BrandService(ApplicationDbContext context)
-  {
+  private readonly IImageService _imageService;
+  public BrandService(ApplicationDbContext context, IImageService imageService) {
     _context = context;
+    _imageService = imageService;
   }
   public Task<List<Brand>> GetAll()
   {
-    return _context.Brands.ToListAsync();
+    return _context.Brands.Include(b => b.Image).ToListAsync();
   }
 
   public Task<Brand> GetById(int id)
@@ -24,13 +27,14 @@ public class BrandService : IBrandService
 
   public Task<Brand> GetByProductId(int productId)
   {
-    return _context.Brands.FirstOrDefaultAsync(brand => brand.Products.Any(product => product.Id == productId));
+    return _context.Brands.FirstOrDefaultAsync(brand => brand.Products.Any(p => p.Id == productId));
   }
-  public Task<Brand> Add(Brand brand)
+  public async Task<Brand> Add(Brand brand)
   {
+    _context.Images.Add(brand.Image);
     _context.Brands.Add(brand);
-    _context.SaveChangesAsync();
-    return Task.FromResult(brand);
+    await _context.SaveChangesAsync();
+    return brand;
   }
 
   public Task<Brand> Update(Brand brand)
@@ -40,11 +44,11 @@ public class BrandService : IBrandService
     return Task.FromResult(brand);
   }
 
-  public Task Delete(int id)
+  public async Task Delete(int id)
   {
     Brand brand = _context.Brands.Find(id);
+    await _imageService.DeleteImage(brand.Image);
     _context.Remove(brand);
-    _context.SaveChangesAsync();
-    return Task.CompletedTask;
+    await _context.SaveChangesAsync();
   }
 }
