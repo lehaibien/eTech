@@ -1,14 +1,17 @@
 ﻿using eTech.Context;
 using eTech.Entities;
 using eTech.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Services {
   public class RatingService : IRatingService {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public RatingService(ApplicationDbContext context) {
+    public RatingService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) {
       _context = context;
+      _userManager = userManager;
     }
 
     public Task<List<Rating>> GetAll() {
@@ -27,7 +30,13 @@ namespace eTech.Services {
       if(rating == null) {
         throw new ArgumentNullException(nameof(rating));
       }
-      _context.Add(rating);
+      if(rating.Product == null && rating.ProductId != 0) {
+        rating.Product = await _context.Products.FirstOrDefaultAsync(p => p.Id == rating.ProductId);
+      }
+      if(rating.User == null && rating.UserId != "") {
+        rating.User = await _userManager.FindByIdAsync(rating.UserId);
+      }
+      _context.Ratings.Add(rating);
       await _context.SaveChangesAsync();
       return rating;
     }

@@ -1,7 +1,7 @@
 ﻿using eTech.Entities;
 using eTech.Entities.Requests;
 using eTech.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eTech.Controllers {
@@ -17,16 +17,19 @@ namespace eTech.Controllers {
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll() {
       return Ok(await _productService.GetAll());
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public async Task<IActionResult> GetById(int id) {
       return Ok(await _productService.GetById(id));
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Add([FromForm] ProductRequestAdd product) {
       Product p = new Product{
         Name = product.Name,
@@ -47,6 +50,22 @@ namespace eTech.Controllers {
         }
       }
       return Ok(await _productService.Add(p));
+    }
+
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> Update(Product product) {
+      if (product == null) {
+        return BadRequest("Product is null");
+      }
+      return Ok(await _productService.Update(product));
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Delete(int id) {
+      await _productService.Delete(id);
+      return Ok();
     }
   }
 }
