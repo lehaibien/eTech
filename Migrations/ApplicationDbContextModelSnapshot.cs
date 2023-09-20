@@ -196,7 +196,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.ApplicationUser", b =>
@@ -301,7 +301,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Category", b =>
@@ -333,7 +333,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Image", b =>
@@ -372,7 +372,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Order", b =>
@@ -405,7 +405,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.OrderItem", b =>
@@ -429,7 +429,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Payment", b =>
@@ -460,7 +460,7 @@ namespace eTech.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Product", b =>
@@ -503,7 +503,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("eTech.Entities.Rating", b =>
@@ -533,7 +533,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
