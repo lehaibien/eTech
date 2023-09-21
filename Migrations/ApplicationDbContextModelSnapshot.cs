@@ -196,7 +196,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("eTech.Entities.ApplicationUser", b =>
@@ -301,7 +301,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("eTech.Entities.Category", b =>
@@ -333,7 +333,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("eTech.Entities.Image", b =>
@@ -372,7 +372,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("eTech.Entities.Order", b =>
@@ -405,11 +405,17 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("eTech.Entities.OrderItem", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
 
@@ -425,11 +431,13 @@ namespace eTech.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id", "OrderId", "ProductId");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("eTech.Entities.Payment", b =>
@@ -460,7 +468,7 @@ namespace eTech.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("eTech.Entities.Product", b =>
@@ -503,7 +511,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("eTech.Entities.Rating", b =>
@@ -533,7 +541,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

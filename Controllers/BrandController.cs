@@ -1,7 +1,6 @@
 using eTech.Entities;
 using eTech.Entities.Requests;
 using eTech.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

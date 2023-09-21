@@ -12,8 +12,8 @@ using eTech.Context;
 namespace eTech.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230918084027_identityUser")]
-    partial class identityUser
+    [Migration("20230921011142_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,7 +221,7 @@ namespace eTech.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("ImageId")
+                    b.Property<long?>("ImageId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("LockoutEnabled")
@@ -605,9 +605,7 @@ namespace eTech.Migrations
                 {
                     b.HasOne("eTech.Entities.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
                 });
