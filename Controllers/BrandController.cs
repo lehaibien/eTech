@@ -12,21 +12,21 @@ namespace eTech.Controllers
   {
     private readonly IBrandService _brandService;
     private readonly IImageService _imageService;
-    public BrandController(IBrandService brandService, IImageService imageService) {
+    public BrandController(IBrandService brandService, IImageService imageService)
+    {
       _brandService = brandService;
       _imageService = imageService;
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetAll()
     {
       return Ok(await _brandService.GetAll());
     }
 
     [HttpGet("{id}")]
-    [Authorize]
-    public async Task<IActionResult> GetById(int id) {
+    public async Task<IActionResult> GetById(int id)
+    {
       return Ok(await _brandService.GetById(id));
     }
 
