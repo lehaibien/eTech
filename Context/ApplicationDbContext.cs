@@ -22,7 +22,7 @@ namespace eTech.Context
     {
       base.OnModelCreating(modelBuilder);
       modelBuilder.Entity<OrderItem>()
-        .HasKey(oi => new { oi.OrderId, oi.ProductId });
+        .HasKey(oi => new { oi.Id, oi.OrderId, oi.ProductId });
       modelBuilder.Entity<Category>()
         .HasMany(cat => cat.Products).WithOne(p => p.Category);
       modelBuilder.Entity<Brand>()

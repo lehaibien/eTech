@@ -1,8 +1,6 @@
 using eTech.Context;
 using eTech.Entities;
 using eTech.Services.Interfaces;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Services;
