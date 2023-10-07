@@ -4,6 +4,7 @@ using eTech.Entities.Response;
 using eTech.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace eTech.Controllers
 {
@@ -34,20 +35,18 @@ namespace eTech.Controllers
       {
         return NotFound();
       }
-      ProductResponse p = new()
-      {
-        Id = product.Id,
-        Name = product.Name,
-        Description = product.Description,
-        Price = product.Price,
-        Stock = product.Stock,
-        Category = product.Category,
-        Brand = product.Brand,
-        Images = product.Images.Select(i => $"https://localhost:7066/static/images/{i.FileName}").ToList(),
-        CreatedAt = product.CreatedAt,
-        ModifiedAt = product.ModifiedAt
-      };
-      return Ok(p);
+      return Ok(product);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string query)
+    {
+      if(String.IsNullOrEmpty(query)) {
+        return BadRequest("Query is null");
+      }
+      // deserialize query
+      List<Product> products = await _productService.Search(query);
+      return Ok(products);
     }
 
     [HttpPost]
