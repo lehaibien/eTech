@@ -6,5 +6,6 @@
         public string? PhoneNumber { get; set; }
         public string? Name { get; set; }
         public Image Image { get; set; }
+        public string Role { get; set; }
     }
 }

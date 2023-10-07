@@ -4,6 +4,7 @@ using eTech.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace eTech.Controllers {
@@ -27,16 +28,19 @@ namespace eTech.Controllers {
             List<Claim> claims = _tokenService.GetClaimsFromExpiredToken(accessToken);    
             string userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            string role = string.Join(",", await _userManager.GetRolesAsync(user)) == "Admin,User" ? "Admin":"User";
             if (user == null) {
                 return NotFound();
             }
+
             var u = new UserResponse {
                 Id = user.Id,
                 Username = user.UserName,
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Image = user.Image
+                Image = user.Image,
+                Role = role
             };
             return Ok(u);
         }
