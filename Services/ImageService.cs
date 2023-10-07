@@ -13,9 +13,8 @@ namespace eTech.Services {
     }
 
     public Task<Image> Upload(IFormFile file) {
-      Image image = new();
       if (file.Length <= 0) {
-        return Task.FromResult(image);
+        return Task.FromResult(new Image());
       }
       var rootFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
       var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -24,10 +23,12 @@ namespace eTech.Services {
         file.CopyTo(stream);
         stream.Flush();
       }
-      image.FileName = fileName;
-      image.FilePath = filePath;
-      image.FileSize = file.Length;
-      image.OriginalFileName = file.FileName;
+      Image image = new Image {
+        FileName = fileName,
+        FilePath = "https://localhost:7066/static/images/" + fileName,
+        FileSize = file.Length,
+        OriginalFileName = file.FileName
+      };
       return Task.FromResult(image);
     }
 

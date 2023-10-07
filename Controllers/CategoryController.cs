@@ -21,6 +21,7 @@ namespace eTech.Controllers
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
       return Ok(await _categoryService.GetAll());
