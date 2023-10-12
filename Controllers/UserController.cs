@@ -15,7 +15,7 @@ namespace eTech.Controllers {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
 
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService) {
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService, ICartService cartService) {
             _userManager = userManager;
             _roleManager = roleManager;
             _tokenService = tokenService;
