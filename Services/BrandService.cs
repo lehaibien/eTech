@@ -9,7 +9,8 @@ public class BrandService : IBrandService
 {
   private readonly ApplicationDbContext _context;
   private readonly IImageService _imageService;
-  public BrandService(ApplicationDbContext context, IImageService imageService) {
+  public BrandService(ApplicationDbContext context, IImageService imageService)
+  {
     _context = context;
     _imageService = imageService;
   }
@@ -20,7 +21,7 @@ public class BrandService : IBrandService
 
   public Task<Brand> GetById(int id)
   {
-    return _context.Brands.FirstOrDefaultAsync(brand => brand.Id == id);
+    return _context.Brands.Include(b => b.Image).Include(b => b.Products).ThenInclude(p => p.Images).Include(b => b.Products).ThenInclude(p => p.Category).FirstOrDefaultAsync(brand => brand.Id == id);
   }
 
   public Task<Brand> GetByProductId(int productId)
@@ -37,6 +38,8 @@ public class BrandService : IBrandService
 
   public Task<Brand> Update(Brand brand)
   {
+    _context.Images.Update(brand.Image);
+    _context.SaveChangesAsync();
     _context.Update(brand);
     _context.SaveChangesAsync();
     return Task.FromResult(brand);
