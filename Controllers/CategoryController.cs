@@ -21,7 +21,6 @@ namespace eTech.Controllers
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetAll()
     {
       return Ok(await _categoryService.GetAll());
@@ -43,12 +42,12 @@ namespace eTech.Controllers
     [Authorize]
     public async Task<IActionResult> Add([FromForm] CategoryRequestAdd categoryRequest)
     {
-      Image image = await _imageService.Upload(categoryRequest.File);
-      Category cat = new Category
+      Image image = await _imageService.Upload(categoryRequest.Image);
+      Category cat = new()
       {
         Name = categoryRequest.Name,
         Description = categoryRequest.Description,
-        Products = categoryRequest.Products,
+        Products = new List<Product>(),
         Image = image
       };
       Category response = null;
