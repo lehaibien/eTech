@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Services {
-    public class CartService: ICartService {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
+    public class CartService : ICartService {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         public CartService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) {
             _context = context;
             _userManager = userManager;
@@ -26,13 +26,17 @@ namespace eTech.Services {
         }
 
         public async Task<CartItem> Add(CartItem cart) {
-            if(cart == null) {
+            if (cart == null) {
                 throw new ArgumentNullException(nameof(cart));
             }
-            cart.User = _userManager.FindByIdAsync(cart.UserId).Result;
-            cart.Product = await _context.Products.Include(p => p.Images).Include(p => p.Brand).Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == cart.ProductId);
+            //if (cart.User == null) {
+            //    cart.User = await _userManager.FindByIdAsync(cart.UserId);
+            //}
+            if(cart.Product == null) {
+                cart.Product = await _context.Products.Include(p => p.Images).Include(p => p.Brand).Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == cart.ProductId);
+            }
             CartItem c = await _context.CartItems.FirstOrDefaultAsync(c => c.ProductId == cart.ProductId && c.UserId == cart.UserId);
-            if(c != null) {
+            if (c != null) {
                 c.Quantity += cart.Quantity;
                 _context.CartItems.Update(c);
                 await _context.SaveChangesAsync();

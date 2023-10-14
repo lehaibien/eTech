@@ -1,6 +1,8 @@
 ﻿using eTech.Entities;
+using eTech.Entities.Requests;
 using eTech.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,11 +25,16 @@ namespace eTech.Controllers {
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(CartItem cartItem) {
+        public async Task<IActionResult> Add(CartItemRequestAdd cartItem) {
             if(cartItem == null) {
                 return BadRequest("Cart item is null");
             }
-            return Ok(await _cartService.Add(cartItem));
+            CartItem cart = new() {
+                UserId = cartItem.UserId,
+                ProductId = cartItem.ProductId,
+                Quantity = cartItem.Quantity,
+            };
+            return Ok(await _cartService.Add(cart));
         }
     }
 }
