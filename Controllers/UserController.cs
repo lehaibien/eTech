@@ -32,7 +32,7 @@ namespace eTech.Controllers {
             List<Claim> claims = _tokenService.GetClaimsFromExpiredToken(accessToken);    
             string userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             //ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            var user = await _userManager.Users.Include(u => u.Image).SingleAsync(u => u.Id == userId); 
+            var user = await _userManager.Users.Include(u => u.Image).Include(u => u.Addresses).SingleAsync(u => u.Id == userId); 
             string role = string.Join(",", await _userManager.GetRolesAsync(user)) == "Admin,User" ? "Admin":"User";
             if (user == null) {
                 return NotFound();
@@ -44,6 +44,7 @@ namespace eTech.Controllers {
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                Address = user.Addresses.ToList(),
                 Image = user.Image,
                 Role = role
             };

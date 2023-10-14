@@ -49,7 +49,6 @@ namespace eTech.Controllers
                 UserId = addressRequest.UserId,
                 User = user
             };
-
             return await _addressService.Add(address);
         }
 

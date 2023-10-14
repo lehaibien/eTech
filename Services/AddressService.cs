@@ -31,14 +31,12 @@ namespace eTech.Services
         public Task<List<Address>> GetAll()
         {
             return _context.Addresses
-                .Include(a => a.User)
                 .ToListAsync();
         }
 
         public Task<Address> GetById(int id)
         {
             return _context.Addresses
-                .Include(a => a.User)
                 .FirstOrDefaultAsync(ad => ad.Id == id);
         }
 
