@@ -101,6 +101,8 @@ builder.Services.AddAuthentication(options =>
   });
 
 // Db Context
+// Add transient lifetime for dbcontext
+builder.Services.AddTransient<ApplicationDbContext>();
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(configuration.GetConnectionString("eTech"))
 );

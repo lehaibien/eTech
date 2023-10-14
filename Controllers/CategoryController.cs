@@ -33,9 +33,14 @@ namespace eTech.Controllers
     }
 
     [HttpGet("{id}/image")]
-    public Task<Image> GetImage(int id)
+    public async Task<IActionResult> GetImage(int id)
     {
-      return _categoryService.GetImageByCategoryId(id);
+      Category category = await _categoryService.GetById(id);
+      if (category == null)
+      {
+        return NotFound();
+      }
+      return await _imageService.GetImage(category.Image.FileName);
     }
 
     [HttpPost]
@@ -60,6 +65,36 @@ namespace eTech.Controllers
         return StatusCode(StatusCodes.Status500InternalServerError);
       }
       return CreatedAtAction(nameof(Add), response);
+    }
+
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> Update([FromForm] CategoryRequestUpdate category)
+    {
+      Category currentCategory = await _categoryService.GetById(category.Id);
+      if (currentCategory == null)
+      {
+        return BadRequest("Category not found");
+      }
+      currentCategory.Name = category.Name;
+      currentCategory.Description = category.Description;
+      Image img = currentCategory.Image;
+      if (category.Image != null && currentCategory.Image.OriginalFileName != category.Image.FileName)
+      {
+        Image image = _imageService.Upload(category.Image).Result;
+        if (image == null)
+        {
+          return BadRequest("Image upload failed");
+        }
+
+        currentCategory.Image = image;
+      }
+      Category updatedCategory = await _categoryService.Update(currentCategory);
+      if(updatedCategory.Image.FileName != img.FileName)
+      {
+        await _imageService.DeleteImage(img);
+      }
+      return Ok(updatedCategory);
     }
   }
 }

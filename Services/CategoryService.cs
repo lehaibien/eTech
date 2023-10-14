@@ -23,12 +23,7 @@ namespace eTech.Services
 
     public Task<Category> GetById(int id)
     {
-      return _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
-    }
-
-    public Task<Image> GetImageByCategoryId(int id)
-    {
-      return _context.Categories.Where(c => c.Id == id).Select(c => c.Image).FirstAsync();
+      return _context.Categories.Include(c => c.Image).Include(c => c.Products).ThenInclude(p => p.Images).Include(c => c.Products).ThenInclude(p => p.Brand).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public Task<Category> GetByProductId(int productId)
@@ -46,7 +41,11 @@ namespace eTech.Services
 
     public Task<Category> Update(Category category)
     {
-      throw new NotImplementedException();
+      _context.Images.Update(category.Image);
+      _context.SaveChangesAsync();
+      _context.Update(category);
+      _context.SaveChangesAsync();
+      return Task.FromResult(category);
     }
 
     public async Task Delete(int id)
