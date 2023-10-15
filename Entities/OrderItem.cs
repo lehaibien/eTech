@@ -5,9 +5,6 @@ namespace eTech.Entities
 {
   public class OrderItem
   {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
     public int OrderId { get; set; }
     [ForeignKey(nameof(OrderId))]
     public virtual Order Order { get; set; }

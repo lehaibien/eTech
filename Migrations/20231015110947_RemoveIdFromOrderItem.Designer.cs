@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using eTech.Context;
@@ -11,9 +12,11 @@ using eTech.Context;
 namespace eTech.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231015110947_RemoveIdFromOrderItem")]
+    partial class RemoveIdFromOrderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,6 +175,10 @@ namespace eTech.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasColumnType("text");
@@ -180,11 +187,18 @@ namespace eTech.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ZipCode")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -195,9 +209,6 @@ namespace eTech.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("AddressId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -252,8 +263,6 @@ namespace eTech.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("ImageId");
 
@@ -600,17 +609,22 @@ namespace eTech.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("eTech.Entities.Address", b =>
+                {
+                    b.HasOne("eTech.Entities.ApplicationUser", "User")
+                        .WithOne("Address")
+                        .HasForeignKey("eTech.Entities.Address", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("eTech.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("eTech.Entities.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
                     b.HasOne("eTech.Entities.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");
-
-                    b.Navigation("Address");
 
                     b.Navigation("Image");
                 });
@@ -741,6 +755,8 @@ namespace eTech.Migrations
 
             modelBuilder.Entity("eTech.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Ratings");
