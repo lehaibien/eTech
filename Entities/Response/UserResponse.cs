@@ -6,5 +6,7 @@
         public string? PhoneNumber { get; set; }
         public string? Name { get; set; }
         public Image Image { get; set; }
+        public Address Address { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

@@ -1,16 +1,15 @@
-using eTech.Auth;
 using eTech.Context;
 using eTech.Entities;
 using eTech.Services;
 using eTech.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -102,10 +101,8 @@ builder.Services.AddAuthentication(options =>
 
 // Db Context
 // Add transient lifetime for dbcontext
-builder.Services.AddTransient<ApplicationDbContext>();
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseNpgsql(configuration.GetConnectionString("eTech"))
-);
+    options => options.UseNpgsql(configuration.GetConnectionString("eTech")), ServiceLifetime.Transient);
 // Dependency Injection
 
 builder.Services.AddScoped<IImageService, ImageService>();
@@ -117,6 +114,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<UserService>();
 
 // CORS
 var cors = new EnableCorsAttribute("AllowAll");
@@ -148,8 +146,24 @@ app.UseStaticFiles(new StaticFileOptions
 {
   FileProvider = new PhysicalFileProvider(
     Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
-  RequestPath = "/static"
+  RequestPath = "/static",
+  ServeUnknownFileTypes = true,
+  OnPrepareResponse = async (ctx) =>
+  {
+    var policyProvider = app.Services.GetRequiredService<ICorsPolicyProvider>();
+    var corsService = app.Services.GetRequiredService<ICorsService>();
+    var policy = await policyProvider.GetPolicyAsync(ctx.Context, cors.PolicyName!);
+    CorsResult corsResult = corsService.EvaluatePolicy(ctx.Context, policy);
+    corsService.ApplyResult(corsResult, ctx.Context.Response);
+  }
 });
+
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//   FileProvider = new PhysicalFileProvider(
+//     Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
+//   RequestPath = "/static"
+// });
 
 app.UseHttpsRedirection();
 
