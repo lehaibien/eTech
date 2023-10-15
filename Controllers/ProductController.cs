@@ -114,7 +114,6 @@ namespace eTech.Controllers
         {
           Image img = await _imageService.Upload(image);
           p.Images.Add(img);
-
         }
       }
       return Ok(await _productService.Add(p));

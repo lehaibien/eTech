@@ -1,4 +1,6 @@
+using eTech.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace eTech.Entities
 {
