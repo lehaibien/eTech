@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using eTech.Context;
@@ -11,9 +12,11 @@ using eTech.Context;
 namespace eTech.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231015112514_RemoveUserFromAddress")]
+    partial class RemoveUserFromAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,6 +175,10 @@ namespace eTech.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasColumnType("text");
@@ -185,8 +192,6 @@ namespace eTech.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Addresses");
                 });
@@ -298,7 +303,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("eTech.Entities.CartItem", b =>
@@ -319,7 +324,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("eTech.Entities.Category", b =>
@@ -351,7 +356,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("eTech.Entities.Image", b =>
@@ -390,7 +395,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("eTech.Entities.Order", b =>
@@ -423,7 +428,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("eTech.Entities.OrderItem", b =>
@@ -447,7 +452,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("eTech.Entities.Payment", b =>
@@ -475,7 +480,7 @@ namespace eTech.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("eTech.Entities.Product", b =>
@@ -518,7 +523,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("eTech.Entities.Rating", b =>
@@ -548,7 +553,7 @@ namespace eTech.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

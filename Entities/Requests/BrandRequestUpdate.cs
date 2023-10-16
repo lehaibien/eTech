@@ -1,8 +1,9 @@
 namespace eTech.Entities.Requests
 {
-  public class BrandRequestAdd
+  public class BrandRequestUpdate
   {
-    public string Name { get; set; }
+    public int Id { get; set; }
+    public required string Name { get; set; }
     public string Country { get; set; }
     public IFormFile Image { get; set; }
   }

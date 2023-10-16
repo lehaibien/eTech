@@ -4,7 +4,6 @@ using eTech.Entities.Response;
 using eTech.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace eTech.Controllers
 {
@@ -38,10 +37,52 @@ namespace eTech.Controllers
       return Ok(product);
     }
 
+    [HttpGet("{id}/images")]
+    public async Task<IActionResult> GetImages(int id)
+    {
+      Product product = await _productService.GetById(id);
+      if (product == null)
+      {
+        return NotFound();
+      }
+      List<ImageBlob> images = new();
+      foreach (Image img in product.Images)
+      {
+        PhysicalFileResult file = await _imageService.GetImage(img.FileName);
+        var bytes = await System.IO.File.ReadAllBytesAsync(file.FileName);
+        ImageBlob blob = new(bytes, GetContentType(img.FileName));
+        images.Add(blob);
+      }
+      return Ok(images);
+    }
+
+    private string GetContentType(string path)
+    {
+      var ext = System.IO.Path.GetExtension(path).ToLowerInvariant();
+      var contentType = ext switch
+      {
+        ".webp" => "image/webp",
+        ".png" => "image/png",
+        ".jpg" => "image/jpeg",
+        ".jpeg" => "image/jpeg",
+        ".jpe" => "image/jpeg",
+        ".gif" => "image/gif",
+        ".bmp" => "image/bmp",
+        ".ico" => "image/x-icon",
+        ".tiff" => "image/tiff",
+        ".tif" => "image/tiff",
+        ".svg" => "image/svg+xml",
+        ".svgz" => "image/svg+xml",
+        _ => null
+      };
+      return contentType;
+    }
+
     [HttpGet("search")]
     public async Task<IActionResult> Search([FromQuery] string query)
     {
-      if(String.IsNullOrEmpty(query)) {
+      if (String.IsNullOrEmpty(query))
+      {
         return BadRequest("Query is null");
       }
       // deserialize query
@@ -53,7 +94,8 @@ namespace eTech.Controllers
     [Authorize]
     public async Task<IActionResult> Add([FromForm] ProductRequestAdd product)
     {
-      if (product == null) {
+      if (product == null)
+      {
         return BadRequest("Product is null");
       }
       Product p = new()
