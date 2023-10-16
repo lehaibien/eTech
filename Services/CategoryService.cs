@@ -51,9 +51,13 @@ namespace eTech.Services
     public async Task Delete(int id)
     {
       Category cat = _context.Categories.Find(id);
-      _imageService.DeleteImage(cat.Image);
+      if (cat == null)
+      {
+        throw new Exception("Category not found");
+      }
       _context.Remove(cat);
       await _context.SaveChangesAsync();
+      await _imageService.DeleteImage(cat.Image);
     }
   }
 }

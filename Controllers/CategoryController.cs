@@ -90,11 +90,24 @@ namespace eTech.Controllers
         currentCategory.Image = image;
       }
       Category updatedCategory = await _categoryService.Update(currentCategory);
-      if(updatedCategory.Image.FileName != img.FileName)
+      if (updatedCategory.Image.FileName != img.FileName)
       {
         await _imageService.DeleteImage(img);
       }
       return Ok(updatedCategory);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Delete(int id)
+    {
+      Category category = await _categoryService.GetById(id);
+      if (category == null)
+      {
+        return BadRequest("Category not found");
+      }
+      await _categoryService.Delete(id);
+      return Ok();
     }
   }
 }
