@@ -7,7 +7,7 @@ namespace eTech.Context
   public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
   {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
+    
     public DbSet<Address> Addresses { get; set; }
     public DbSet<ApplicationUser> Users { get; set; }
     public DbSet<Category> Categories { get; set; }

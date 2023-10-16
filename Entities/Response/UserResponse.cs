@@ -8,5 +8,6 @@
         public Image Image { get; set; }
         public Address Address { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public string Role { get; set; }
     }
 }
