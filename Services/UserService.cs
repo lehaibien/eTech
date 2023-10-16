@@ -1,20 +1,27 @@
 ﻿using eTech.Context;
 using eTech.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using eTech.Entities.Requests;
+using eTech.Services.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace eTech.Services {
-    public class UserService {
+namespace eTech.Services
+{
+    public class UserService : IUserService
+    {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IImageService _imageService;
 
-        public UserService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) {
+        public UserService(ApplicationDbContext context, IImageService imageService)
+        {
             _context = context;
-            _userManager = userManager;
+            _imageService = imageService;
         }
-
-        public Task<ApplicationUser> GetUserById(string id) {
-            return _context.Users.Include(u => u.Image).Include(u => u.Address).Include(u => u.Orders).FirstOrDefaultAsync(u => u.Id == id);
+        public Task<Image> UpdateImageUser(IFormFile file)
+        {
+            Image img = _imageService.Upload(file).Result;
+            _context.Images.Add(img);
+            _context.SaveChanges();
+            return Task.FromResult(img);
         }
     }
 }

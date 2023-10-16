@@ -43,7 +43,7 @@ namespace eTech.Services
     {
       return _context.Orders
           .Include(o => o.User)
-          .ThenInclude(u => u.Address)
+          .ThenInclude(u => u.Addresses)
           .Include(o => o.User)
           .ThenInclude(u => u.Image)
           .Include(o => o.Payment)
