@@ -5,6 +5,7 @@ namespace eTech.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<Image> UpdateImageUser(IFormFile file);
+        public Task<ApplicationUser> GetUserById(string id);
+        public Task<Image> UpdateImageUser(ApplicationUser user, Image img);
     }
 }

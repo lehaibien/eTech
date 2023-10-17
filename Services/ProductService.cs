@@ -21,6 +21,15 @@ namespace eTech.Services
       return await _context.Products.Include(p => p.Category).Include(p => p.Brand).Include(p => p.Images).ToListAsync();
     }
 
+    public async Task<List<Product>> GetLatestProduct(int limit) {
+        List<Product> products = await _context.Products
+            .Include(p => p.Images)
+            .OrderByDescending(p => p.CreatedAt)
+            .Take(limit)
+            .ToListAsync();
+        return products;
+    }
+
     public async Task<Product> GetById(int id)
     {
       return await _context.Products.Include(p => p.Images).Include(p => p.Brand).Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
