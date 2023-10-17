@@ -64,13 +64,14 @@ namespace eTech.Controllers
         };
         orderItems.Add(orderItem);
       }
-      var tasks = orderItems.Select(async item => await _orderService.AddOrderItem(item));
-      await Task.WhenAll(tasks);
-      List<CartItem> cartItems = await _cartService.GetByUserId(od.UserId);
-      foreach (CartItem item in cartItems)
-      {
-        await _cartService.Delete(od.UserId, item.ProductId);
+      foreach(var item in orderItems) {
+        await _orderService.AddOrderItem(item);
       }
+      //var tasks = orderItems.Select(async item => await _orderService.AddOrderItem(item));
+      //await Task.WhenAll(tasks);
+      List<CartItem> cartItems = await _cartService.GetByUserId(od.UserId);
+      var cartTask = cartItems.Select(async item => await _cartService.Delete(od.UserId, item.ProductId));
+      await Task.WhenAll(cartTask);
       return Ok(await _orderService.GetById(od.Id));
     }
 
@@ -81,11 +82,21 @@ namespace eTech.Controllers
       return _orderService.Update(order);
     }
 
+    [HttpPut("{id}/status")]
+    [Authorize]
+    public async Task<Order> UpdateStatus(int id,[FromBody] int status)
+    {
+      Order order = await _orderService.GetById(id);
+      order.OrderStatus = (Enums.OrderStatus)status;
+      return await _orderService.Update(order);
+    }
+
     [HttpDelete("{id}")]
     [Authorize]
-    public Task Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-      return _orderService.Delete(id);
+      await _orderService.Delete(id);
+      return NoContent();
     }
 
     [HttpPost]

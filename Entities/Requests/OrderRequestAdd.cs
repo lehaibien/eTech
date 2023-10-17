@@ -9,6 +9,6 @@ namespace eTech.Entities.Requests
     public PaymentType Type { get; set; }
     public double Fee { get; set; }
     public ICollection<OrderItemRequestAdd> Items { get; set; }
-    public OrderStatus Status { get; set; }
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
   }
 }

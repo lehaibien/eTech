@@ -148,14 +148,20 @@ app.UseStaticFiles(new StaticFileOptions
     Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
   RequestPath = "/static",
   ServeUnknownFileTypes = true,
-  OnPrepareResponse = async (ctx) =>
+  OnPrepareResponse = ctx =>
   {
-    var policyProvider = app.Services.GetRequiredService<ICorsPolicyProvider>();
-    var corsService = app.Services.GetRequiredService<ICorsService>();
-    var policy = await policyProvider.GetPolicyAsync(ctx.Context, cors.PolicyName!);
-    CorsResult corsResult = corsService.EvaluatePolicy(ctx.Context, policy);
-    corsService.ApplyResult(corsResult, ctx.Context.Response);
-  }
+    ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+    ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept");
+  },
+  // OnPrepareResponse = async (ctx) =>
+  // {
+  //   var policyProvider = app.Services.GetRequiredService<ICorsPolicyProvider>();
+  //   var corsService = app.Services.GetRequiredService<ICorsService>();
+  //   var policy = await policyProvider.GetPolicyAsync(ctx.Context, cors.PolicyName!);
+  //   CorsResult corsResult = corsService.EvaluatePolicy(ctx.Context, policy);
+  //   corsService.ApplyResult(corsResult, ctx.Context.Response);
+  // }
 });
 
 // app.UseStaticFiles(new StaticFileOptions
