@@ -41,6 +41,9 @@ namespace eTech.Services {
                 //.Include(o => o.User.Addresses)
                 .Include(o => o.OrderItems)
                 .ThenInclude(o => o.Product)
+                .ThenInclude(o => o.Brand)
+                .ThenInclude(p => p.Products)
+                .ThenInclude(p => p.Images)
                 .ToListAsync();
         }
 
